@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ld" type="CMakeRunConfiguration" factoryName="Application" singleton="true" PROGRAM_PARAMS="--as-needed /lib64/ld-linux-x86-64.so.2 -o aft-mtp-cli /usr/lib/x86_64-linux-gnu/Scrt1.o /usr/lib/x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib -L/lib/x86_64-linux-gnu -L/usr/lib/x86_64-linux-gnu CMakeFiles/aft-mtp-cli.dir/Command.cpp.o CMakeFiles/aft-mtp-cli.dir/Session.cpp.o CMakeFiles/aft-mtp-cli.dir/Tokenizer.cpp.o CMakeFiles/aft-mtp-cli.dir/arg_lexer.l.cpp.o CMakeFiles/aft-mtp-cli.dir/cli.cpp.o CMakeFiles/aft-mtp-cli.dir/CommandLine.cpp.o -lmagic ../libmtp-ng-static.a -lreadline -lpthread -lstdc++ -lm -lgcc_s -lc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o" WORKING_DIR="file://$PROJECT_DIR$/../android-file-transfer-linux/build/cli" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="ld" CONFIG_NAME="Debug" RUN_PATH="$PROJECT_DIR$/build/ld/ld-new">
+    <method v="2">
+      <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
