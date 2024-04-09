@@ -29,10 +29,9 @@ Optional Features:
   --disable-libquadmath-support
                           disable libquadmath support for Fortran
   --enable-libada         build libada directory
+  --enable-libgm2         build libgm2 directory
   --enable-libssp         build libssp directory
   --disable-libstdcxx     do not build libstdc++-v3 directory
-  --enable-liboffloadmic=ARG
-                          build liboffloadmic [ARG={no,host,target}]
   --enable-bootstrap      enable bootstrapping [yes if native build]
   --enable-pgo-build[=lto]
                           enable the PGO build
@@ -45,6 +44,7 @@ Optional Features:
   --enable-linker-plugin-flags=FLAGS
                           additional flags for configuring and building linker
                           plugins [none]
+  --enable-host-pie       build position independent host executables
   --enable-host-shared    build host code as shared libraries
   --enable-stage1-languages[=all]
                           choose additional languages to build during stage1.
@@ -167,6 +167,8 @@ Some influential environment variables:
               GOC for the target
   GDC_FOR_TARGET
               GDC for the target
+  GM2_FOR_TARGET
+              GM2 for the target
   AR_FOR_TARGET
               AR for the target
   AS_FOR_TARGET
@@ -203,7 +205,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of bfd 2.39.50:
+Configuration of bfd 2.41.50:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -277,7 +279,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of binutils 2.39.50:
+Configuration of binutils 2.41.50:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -387,7 +389,7 @@ Optional Features:
 
 Report bugs to the package provider.
 
-Configuration of gas 2.39.50:
+Configuration of gas 2.41.50:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -490,7 +492,6 @@ Optional Features:
   --enable-targets=TARGETS
                           alternative target configurations
   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
-  --disable-gdbmi         disable machine-interface (MI)
   --enable-tui            enable full-screen terminal user interface (TUI)
   --enable-gdbtk          enable gdbtk graphical user interface (GUI)
   --enable-profiling      enable profiling of GDB
@@ -522,6 +523,9 @@ Optional Packages:
   --with-separate-debug-dir=PATH
                           look for global separate debug info in this path
                           [LIBDIR/debug]
+  --with-additional-debug-dirs=PATHs
+                          colon-separated list of additional directories to
+                          search for separate debug info
   --with-gdb-datadir=PATH look for global separate data files in this path
                           [DATADIR/gdb]
   --with-relocated-sources=PATH
@@ -534,6 +538,7 @@ Optional Packages:
                           [--with-auto-load-dir]
   --without-auto-load-safe-path
                           do not restrict auto-loaded files locations
+  --with-amd-dbgapi       support for the amd-dbgapi target (yes / no / auto)
   --with-debuginfod       Enable debuginfo lookups with debuginfod
                           (auto/yes/no)
   --with-libunwind-ia64   use libunwind frame unwinding for ia64 targets
@@ -556,13 +561,6 @@ Optional Packages:
   --with-libexpat-prefix[=DIR]  search for libexpat in DIR/include and DIR/lib
   --without-libexpat-prefix     don't search for libexpat in includedir and libdir
   --with-libexpat-type=TYPE     type of library to search for (auto/static/shared)
-  --with-libgmp-prefix[=DIR]  search for libgmp in DIR/include and DIR/lib
-  --without-libgmp-prefix     don't search for libgmp in includedir and libdir
-  --with-libgmp-type=TYPE     type of library to search for (auto/static/shared)
-  --with-mpfr             include MPFR support (auto/yes/no)
-  --with-libmpfr-prefix[=DIR]  search for libmpfr in DIR/include and DIR/lib
-  --without-libmpfr-prefix     don't search for libmpfr in includedir and libdir
-  --with-libmpfr-type=TYPE     type of library to search for (auto/static/shared)
   --with-python[=PYTHON]  include python support
                           (auto/yes/no/<python-program>)
   --with-python-libdir[=DIR]
@@ -573,6 +571,10 @@ Optional Packages:
   --with-libipt-prefix[=DIR]  search for libipt in DIR/include and DIR/lib
   --without-libipt-prefix     don't search for libipt in includedir and libdir
   --with-libipt-type=TYPE     type of library to search for (auto/static/shared)
+  --with-xxhash           use libxxhash for hashing (faster) (auto/yes/no)
+  --with-libxxhash-prefix[=DIR]  search for libxxhash in DIR/include and DIR/lib
+  --without-libxxhash-prefix     don't search for libxxhash in includedir and libdir
+  --with-libxxhash-type=TYPE     type of library to search for (auto/static/shared)
   --with-sysroot[=DIR]    search for usr/lib et al within DIR
   --with-system-gdbinit=PATH
                           automatically load a system-wide gdbinit file
@@ -590,10 +592,6 @@ Optional Packages:
   --with-libbabeltrace-prefix[=DIR]  search for libbabeltrace in DIR/include and DIR/lib
   --without-libbabeltrace-prefix     don't search for libbabeltrace in includedir and libdir
   --with-libbabeltrace-type=TYPE     type of library to search for (auto/static/shared)
-  --with-xxhash           use libxxhash for hashing (faster) (auto/yes/no)
-  --with-libxxhash-prefix[=DIR]  search for libxxhash in DIR/include and DIR/lib
-  --without-libxxhash-prefix     don't search for libxxhash in includedir and libdir
-  --with-libxxhash-type=TYPE     type of library to search for (auto/static/shared)
 
 Some influential environment variables:
   CC          C compiler command
@@ -607,14 +605,18 @@ Some influential environment variables:
   CXXFLAGS    C++ compiler flags
   CPP         C preprocessor
   CXXCPP      C++ preprocessor
-  MAKEINFO    Parent configure detects if it is of sufficient version.
-  MAKEINFOFLAGS
-              Parameters for MAKEINFO.
   PKG_CONFIG  path to pkg-config utility
   PKG_CONFIG_PATH
               directories to add to pkg-config's search path
   PKG_CONFIG_LIBDIR
               path overriding pkg-config's built-in search path
+  MAKEINFO    Parent configure detects if it is of sufficient version.
+  MAKEINFOFLAGS
+              Parameters for MAKEINFO.
+  AMD_DBGAPI_CFLAGS
+              C compiler flags for AMD_DBGAPI, overriding pkg-config
+  AMD_DBGAPI_LIBS
+              linker flags for AMD_DBGAPI, overriding pkg-config
   DEBUGINFOD_CFLAGS
               C compiler flags for DEBUGINFOD, overriding pkg-config
   DEBUGINFOD_LIBS
@@ -627,6 +629,8 @@ Some influential environment variables:
               default value of `-d' given by some make applications.
   ZSTD_CFLAGS C compiler flags for ZSTD, overriding pkg-config
   ZSTD_LIBS   linker flags for ZSTD, overriding pkg-config
+  GMPLIBS     How to link GMP
+  GMPINC      How to find GMP include files
   XMKMF       Path to xmkmf, Makefile generator for X Window System
 
 Use these variables to override the choices made by `configure' or to help
@@ -688,6 +692,10 @@ Optional Packages:
   --with-libipt-prefix[=DIR]  search for libipt in DIR/include and DIR/lib
   --without-libipt-prefix     don't search for libipt in includedir and libdir
   --with-libipt-type=TYPE     type of library to search for (auto/static/shared)
+  --with-xxhash           use libxxhash for hashing (faster) (auto/yes/no)
+  --with-libxxhash-prefix[=DIR]  search for libxxhash in DIR/include and DIR/lib
+  --without-libxxhash-prefix     don't search for libxxhash in includedir and libdir
+  --with-libxxhash-type=TYPE     type of library to search for (auto/static/shared)
   --with-ust=PATH       Specify prefix directory for the installed UST package
                           Equivalent to --with-ust-include=PATH/include
                           plus --with-ust-lib=PATH/lib
@@ -751,6 +759,10 @@ Optional Packages:
   --with-libipt-prefix[=DIR]  search for libipt in DIR/include and DIR/lib
   --without-libipt-prefix     don't search for libipt in includedir and libdir
   --with-libipt-type=TYPE     type of library to search for (auto/static/shared)
+  --with-xxhash           use libxxhash for hashing (faster) (auto/yes/no)
+  --with-libxxhash-prefix[=DIR]  search for libxxhash in DIR/include and DIR/lib
+  --without-libxxhash-prefix     don't search for libxxhash in includedir and libdir
+  --with-libxxhash-type=TYPE     type of library to search for (auto/static/shared)
 
 Some influential environment variables:
   CC          C compiler command
@@ -881,7 +893,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of gprof 2.39.50:
+Configuration of gprof 2.41.50:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -929,7 +941,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of gprofng 2.39.50:
+Configuration of gprofng 2.41.50:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -980,7 +992,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of gprofng 2.39.50:
+Configuration of gprofng 2.41.50:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -1034,6 +1046,8 @@ Optional Features:
   --disable-nls           do not use Native Language Support
   --disable-rpath         do not hardcode runtime library paths
   --enable-maintainer-mode enable rules only needed by maintainers
+  --enable-host-shared    build host code as shared libraries
+  --enable-host-pie       build host code as PIE
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1062,7 +1076,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of ld 2.39.50:
+Configuration of ld 2.41.50:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -1102,7 +1116,7 @@ Optional Features:
   --enable-separate-code  enable -z separate-code in ELF linker by default
   --enable-warn-execstack enable warnings when creating an executable stack
   --enable-warn-rwx-segments
-                          enable warnings when creating segements with RWX
+                          enable warnings when creating segments with RWX
                           permissions
   --enable-default-execstack
                           create an executable stack if an input file is
@@ -1278,6 +1292,7 @@ Optional Features:
 			or 'dpd' choses which decimal floating point format
 			to use
   --enable-host-shared    build host code as shared libraries
+  --enable-host-pie       build host code as PIE
 
 Some influential environment variables:
   CC          C compiler command
@@ -1375,7 +1390,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of opcodes 2.39.50:
+Configuration of opcodes 2.41.50:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -1521,6 +1536,8 @@ Optional Features:
                           instruction
   --enable-sim-scache=size
                           Specify simulator execution cache size
+  --enable-sim-smp=n      Specify number of processors to configure for
+                          (default 1)
   --enable-sim-stdio      Specify whether to use stdio for console
                           input/output
   --enable-sim-trace=opts Enable tracing of simulated programs
@@ -1763,17 +1780,6 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-sim-bitsize=N  Specify target bitsize (32 or 64)
-  --enable-sim-float      Specify that the target processor has floating point
-                          hardware
-
-Report bugs to the package provider.
-
-
-Optional Features:
-  --disable-option-checking  ignore unrecognized --enable/--with options
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-sim-bitsize=n		Specify target bitsize (32 or 64).
   --enable-sim-decode-mechanism=which		Specify the instruction decode mechanism.
   --enable-sim-default-model=which	Specify default PowerPC to model.
@@ -1830,6 +1836,7 @@ Optional Features:
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --enable-host-shared    build host code as shared libraries
+  --enable-host-pie       build host code as PIE
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]

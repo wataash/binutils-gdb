@@ -92,10 +92,9 @@ Optional Features:
   --disable-libquadmath-support
                           disable libquadmath support for Fortran
   --enable-libada         build libada directory
+  --enable-libgm2         build libgm2 directory
   --enable-libssp         build libssp directory
   --disable-libstdcxx     do not build libstdc++-v3 directory
-  --enable-liboffloadmic=ARG
-                          build liboffloadmic [ARG={no,host,target}]
   --enable-bootstrap      enable bootstrapping [yes if native build]
   --enable-pgo-build[=lto]
                           enable the PGO build
@@ -108,6 +107,7 @@ Optional Features:
   --enable-linker-plugin-flags=FLAGS
                           additional flags for configuring and building linker
                           plugins [none]
+  --enable-host-pie       build position independent host executables
   --enable-host-shared    build host code as shared libraries
   --enable-stage1-languages[=all]
                           choose additional languages to build during stage1.
@@ -230,6 +230,8 @@ Some influential environment variables:
               GOC for the target
   GDC_FOR_TARGET
               GDC for the target
+  GM2_FOR_TARGET
+              GM2 for the target
   AR_FOR_TARGET
               AR for the target
   AS_FOR_TARGET
